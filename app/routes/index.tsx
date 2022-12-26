@@ -29,7 +29,6 @@ const Header = () => {
             type="text"
             style={{ width: '100%', margin: 0 }}
             placeholder="Recipe url"
-            defaultValue="https://www.allrecipes.com/recipe/79481/olive-puffs/"
           ></input>
           <input type="submit" style={{ margin: 0 }}></input>
         </p>
