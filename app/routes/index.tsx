@@ -1,9 +1,11 @@
 import { json } from '@remix-run/node';
 
 import type { ActionArgs } from '@remix-run/node';
-import { Form, useActionData, useTransition } from '@remix-run/react';
-import type { Recipe } from '~/api/fetchRecipe';
+import { useActionData, useTransition } from '@remix-run/react';
+
 import { fetchRecipe } from '~/api/fetchRecipe';
+import { Header } from '~/components/header';
+import { RecipeDetails } from '~/components/recipe';
 
 export async function action({ request }: ActionArgs) {
   const formData = await request.formData();
@@ -17,67 +19,6 @@ export async function action({ request }: ActionArgs) {
   const recipe = await fetchRecipe(url);
   return json(recipe);
 }
-
-const Header = () => {
-  return (
-    <header className="no-print">
-      <h1>Recipe Printer</h1>
-      <Form method="post">
-        <p style={{ display: 'flex', gap: '.7rem' }}>
-          <input
-            name="url"
-            type="text"
-            style={{ width: '100%', margin: 0 }}
-            placeholder="Recipe url"
-          ></input>
-          <input type="submit" style={{ margin: 0 }}></input>
-        </p>
-      </Form>
-    </header>
-  );
-};
-
-const RecipeDetails = ({
-  recipe,
-  onPrint,
-}: {
-  recipe: Recipe;
-  onPrint: () => void;
-}) => {
-  return (
-    <p>
-      <h2
-        style={{
-          display: 'flex',
-          gap: '16px',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}
-      >
-        <strong>{recipe.title}</strong>
-        <button type="button" onClick={onPrint}>
-          Print
-        </button>
-      </h2>
-      <p>
-        <strong>Ingredients</strong>
-        <ul>
-          {recipe.ingredients.map((ingredient) => (
-            <li key={ingredient}>{ingredient}</li>
-          ))}
-        </ul>
-      </p>
-      <p>
-        <strong>Directions</strong>
-        <ol>
-          {recipe.directions.map((direction) => (
-            <li key={direction.step}>{direction.description}</li>
-          ))}
-        </ol>
-      </p>
-    </p>
-  );
-};
 
 export default function Index() {
   const recipe = useActionData<typeof action>();
